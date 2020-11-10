@@ -1,0 +1,29 @@
+FROM ghcr.io/ng-cdi/onos-docker:intents-app as app
+
+FROM ghcr.io/ng-cdi/onos-docker:intents-onos as onos
+
+FROM alpine:latest
+
+LABEL maintainer="Will Fantom <w.fantom@lancs.ac.uk>"
+
+RUN apk add --no-cache \
+      curl \
+      openjdk8-jre
+
+ENV APP_HOME /root/app
+WORKDIR ${APP_HOME}
+COPY --from=app /app/ .
+
+ENV ONOS_HOME /root/onos
+WORKDIR ${ONOS_HOME}
+COPY --from=onos /src/output/ .
+
+WORKDIR /root
+COPY ./demo-entry.sh .
+RUN chmod +x demo-entry.sh
+
+ENV KARAF_VERSION 3.0.8
+
+EXPOSE 6653 6640 8181 8101 9876
+
+ENTRYPOINT [ "sh", "demo-entry.sh" ]

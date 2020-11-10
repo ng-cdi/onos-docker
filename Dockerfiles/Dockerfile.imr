@@ -1,0 +1,12 @@
+FROM ghcr.io/ng-cdi/onos-docker:intents-environment as builder
+
+ENV ONOS_APP_DIR=/root/onos-apps
+RUN git clone -b ifwd-p2p-intents https://github.com/ANTLab-polimi/onos-app-samples ${ONOS_APP_DIR}
+WORKDIR ${ONOS_APP_DIR}/ifwd
+RUN mvn clean install
+WORKDIR /output
+RUN cp ${ONOS_APP_DIR}/ifwd/target/onos-app-ifwd-1.9.0-SNAPSHOT.oar .
+
+FROM scratch
+
+COPY --from=builder /output/ /app/

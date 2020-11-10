@@ -1,0 +1,36 @@
+ARG UBUNTU_VERSION=bionic
+FROM ubuntu:${UBUNTU_VERSION}
+
+ENV DEPENDENCIES \
+        build-essential \ 
+        bzip2 \
+        curl \
+        git \
+        openjdk-8-jdk \
+        python \
+        python3 \
+        unzip \
+        wget \
+        zip
+
+# Install Dependencies
+RUN apt-get update
+RUN apt-get install -y ${DEPENDENCIES}
+
+# Download and Install Bazel
+ARG BAZEL_VERSION=1.2.1
+RUN curl -L -o bazel.sh https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh
+RUN chmod +x bazel.sh
+RUN ./bazel.sh --user
+ENV BAZEL_HOME /root/.bazel/bin
+
+# Download and Install Maven
+ARG MAVEN_VERSION=3.3.9
+WORKDIR /usr/local
+RUN wget http://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
+ && tar xzf apache-maven-${MAVEN_VERSION}-bin.tar.gz
+ENV M2_HOME /usr/local/apache-maven-${MAVEN_VERSION}/
+ENV MAVEN_HOME /usr/local/apache-maven-${MAVEN_VERSION}/
+
+# Update Path
+ENV PATH ${M2_HOME}bin:${BAZEL_HOME}:${PATH}
