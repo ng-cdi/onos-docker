@@ -8,6 +8,7 @@ LABEL maintainer="Will Fantom <w.fantom@lancs.ac.uk>"
 
 RUN apk add --no-cache \
       curl \
+      jq \
       openjdk8-jre
 
 ENV APP_HOME /root/app
@@ -17,13 +18,17 @@ COPY --from=app /app/ .
 ENV ONOS_HOME /root/onos
 WORKDIR ${ONOS_HOME}
 COPY --from=onos /src/output/ .
+RUN sed -ibak '/log4j.rootLogger=/s/$/, stdout/' $(ls -d apache-karaf-*)/etc/org.ops4j.pax.logging.cfg
 
-WORKDIR /root
-COPY ./demo-entry.sh .
-RUN chmod +x demo-entry.sh
+ENV SCRIPTS_DIR /root
+WORKDIR ${SCRIPTS_DIR}
+COPY ./scripts/ .
+RUN chmod +x demo-entrypoint.sh \
+ && chmod +x wait-for-onos.sh \
+ && chmod +x activate-onos-apps.sh
 
 ENV KARAF_VERSION 3.0.8
 
 EXPOSE 6653 6640 8181 8101 9876
 
-ENTRYPOINT [ "sh", "demo-entry.sh" ]
+ENTRYPOINT [ "sh", "demo-entrypoint.sh" ]

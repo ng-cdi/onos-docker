@@ -1,0 +1,5 @@
+FROM alpine:latest
+
+RUN apk add --no-cache openssh
+
+ENTRYPOINT ["ssh", "-o", "StrictHostKeyChecking=no", "-l", "onos", "-p", "8101", "localhost"]
