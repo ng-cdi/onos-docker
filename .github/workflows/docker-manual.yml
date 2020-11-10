@@ -1,0 +1,111 @@
+name: Docker Manual
+
+on:
+  workflow_dispatch:
+
+jobs:
+  docker-build:
+    name: Docker docker-build
+    runs-on: self-hosted
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@v2
+      - 
+        name: Extract Repo Owner
+        shell: bash
+        run: echo "##[set-output name=owner;]$(echo ${GITHUB_REPOSITORY%%/*} | tr '[:upper:]' '[:lower:]')"
+        id: extract_owner
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - 
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - 
+        name: Login to GH CRegistry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.CR_PAT }}
+      -
+        name: Build and Push Environment
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfiles/Dockerfile.environment
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/${{ steps.extract_owner.outputs.owner }}/${{ github.event.repository.name }}:intents-environment
+          no-cache: false
+          labels: |
+            org.opencontainers.image.title=${{ github.event.repository.name }}-environment
+            org.opencontainers.image.url=${{ github.event.repository.html_url }}
+            org.opencontainers.image.source=${{ github.event.repository.html_url }}
+            org.opencontainers.image.revision=${{ github.sha }}
+      -
+        name: Build and Push ONOS
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfiles/Dockerfile.onos
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/${{ steps.extract_owner.outputs.owner }}/${{ github.event.repository.name }}:intents-onos
+          no-cache: false
+          labels: |
+            org.opencontainers.image.title=${{ github.event.repository.name }}-onos
+            org.opencontainers.image.url=${{ github.event.repository.html_url }}
+            org.opencontainers.image.source=${{ github.event.repository.html_url }}
+            org.opencontainers.image.revision=${{ github.sha }}
+      -
+        name: Build and Push IMR App
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfiles/Dockerfile.imr
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/${{ steps.extract_owner.outputs.owner }}/${{ github.event.repository.name }}:intents-app
+          no-cache: false
+          labels: |
+            org.opencontainers.image.title=${{ github.event.repository.name }}-app
+            org.opencontainers.image.url=${{ github.event.repository.html_url }}
+            org.opencontainers.image.source=${{ github.event.repository.html_url }}
+            org.opencontainers.image.revision=${{ github.sha }}
+      -
+        name: Build and Push Demo
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfiles/Dockerfile.demo
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/${{ steps.extract_owner.outputs.owner }}/${{ github.event.repository.name }}:intents-demo
+          no-cache: false
+          labels: |
+            org.opencontainers.image.title=${{ github.event.repository.name }}-demo
+            org.opencontainers.image.url=${{ github.event.repository.html_url }}
+            org.opencontainers.image.source=${{ github.event.repository.html_url }}
+            org.opencontainers.image.revision=${{ github.sha }}
+      -
+        name: Build and Push CLI
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfiles/Dockerfile.cli
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/${{ steps.extract_owner.outputs.owner }}/${{ github.event.repository.name }}:intents-cli
+          no-cache: false
+          labels: |
+            org.opencontainers.image.title=${{ github.event.repository.name }}-cli
+            org.opencontainers.image.url=${{ github.event.repository.html_url }}
+            org.opencontainers.image.source=${{ github.event.repository.html_url }}
+            org.opencontainers.image.revision=${{ github.sha }}
