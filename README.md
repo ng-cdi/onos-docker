@@ -46,6 +46,16 @@ To run this, simply use the `intents-demo` tag:
 docker run --rm -it -p 8101:8101 -p 8181:8181 -p 6653:6653 -p 6640:6640 -p 9876:9876 ghcr.io/ng-cdi/onos-docker:intents-demo
 ```
 
+To get the APP ID of the IMR application installed with ONOS, provided you have `jq` installed, you can run the following cURL command: 
+```bash
+curl --silent -X GET --user onos:rocks http://localhost:8181/onos/v1/applications/org.onosproject.imr | jq '.id'
+```
+
+To use the ONOS CLI, use the `intents-cli` tagged image:
+```bash
+docker run --rm -it --network "host" ghcr.io/ng-cdi/onos-docker:intents-cli
+```
+
 ## Contributors
 
  - [Ellie Davies](https://github.com/mavi0)
