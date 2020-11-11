@@ -15,6 +15,6 @@ curl --silent -X POST -HContent-Type:application/octet-stream http://localhost:8
 
 echo "ONOS Apps Installed"
 
-# Print App ID for IMR
-imr_id=$(curl --silent -X GET --user onos:rocks http://localhost:8181/onos/v1/applications/org.onosproject.imr | jq '.id')
-echo "IMR APP ID: "${imr_id}
+# Print App ID for IFWD
+ifwd_id=$(curl --silent -X GET --user onos:rocks http://localhost:8181/onos/v1/applications/org.onosproject.ifwd | jq '.id')
+echo "IFWD APP ID: "${ifwd_id}
