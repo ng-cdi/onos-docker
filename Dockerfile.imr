@@ -1,4 +1,5 @@
-FROM ghcr.io/ng-cdi/onos-docker:intents-environment as builder
+ARG ENV_VERSION=latest
+FROM ghcr.io/ng-cdi/onos:env-${ENV_VERSION} as builder
 
 ENV ONOS_APP_DIR=/root/onos-apps
 RUN git clone -b ifwd-p2p-intents https://github.com/ANTLab-polimi/onos-app-samples ${ONOS_APP_DIR}

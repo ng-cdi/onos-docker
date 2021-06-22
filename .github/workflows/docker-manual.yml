@@ -34,11 +34,11 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: Dockerfiles/Dockerfile.environment
+          file: Dockerfile.environment
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/${{ steps.extract_owner.outputs.owner }}/${{ github.event.repository.name }}:intents-environment
+            ghcr.io/${{ steps.extract_owner.outputs.owner }}/onos:env-latest
           no-cache: false
           labels: |
             org.opencontainers.image.title=${{ github.event.repository.name }}-environment
@@ -50,11 +50,11 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: Dockerfiles/Dockerfile.onos
+          file: Dockerfile.onos
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/${{ steps.extract_owner.outputs.owner }}/${{ github.event.repository.name }}:intents-onos
+            ghcr.io/${{ steps.extract_owner.outputs.owner }}/onos:latest
           no-cache: false
           labels: |
             org.opencontainers.image.title=${{ github.event.repository.name }}-onos
@@ -66,11 +66,11 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: Dockerfiles/Dockerfile.imr
+          file: Dockerfile.imr
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/${{ steps.extract_owner.outputs.owner }}/${{ github.event.repository.name }}:intents-app
+            ghcr.io/${{ steps.extract_owner.outputs.owner }}/onos-ifwd:1.9.0
           no-cache: false
           labels: |
             org.opencontainers.image.title=${{ github.event.repository.name }}-app
@@ -82,11 +82,11 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: Dockerfiles/Dockerfile.demo
+          file: Dockerfile.demo
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/${{ steps.extract_owner.outputs.owner }}/${{ github.event.repository.name }}:intents-demo
+            ghcr.io/${{ steps.extract_owner.outputs.owner }}/demo-onos:latest
           no-cache: false
           labels: |
             org.opencontainers.image.title=${{ github.event.repository.name }}-demo
@@ -98,11 +98,11 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: Dockerfiles/Dockerfile.cli
+          file: Dockerfile.cli
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/${{ steps.extract_owner.outputs.owner }}/${{ github.event.repository.name }}:intents-cli
+            ghcr.io/${{ steps.extract_owner.outputs.owner }}/onos-cli:latest
           no-cache: false
           labels: |
             org.opencontainers.image.title=${{ github.event.repository.name }}-cli

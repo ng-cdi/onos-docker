@@ -4,7 +4,7 @@ This repository simply allows ONOS v1.15 to be built into a Docker container. Yo
 
 ## Repo Contents
 
-The 4 Dockerfiles here are separated solely for easing maintainability of the project. They each build atop of each other, so must be tagged correctly when building!
+The 5 Dockerfiles here are separated solely for easing maintainability of the project. They each build atop of each other, so must be tagged correctly when building!
 
 The layer model is: environment -> (onos / imr) -> demo
 
@@ -37,7 +37,7 @@ The layer model is: environment -> (onos / imr) -> demo
   docker build --rm -f Dockerfile.demo -t ghcr.io/ng-cdi/onos-docker:intents-demo .
   ```
 
-To simply build all of this in order, just run the included `build-all.sh` bash script.
+To simply build all of this in order, just run `make`.
 
 ## Run
 
@@ -53,7 +53,7 @@ curl --silent -X GET --user onos:rocks http://localhost:8181/onos/v1/application
 
 To use the ONOS CLI, use the `intents-cli` tagged image:
 ```bash
-docker run --rm -it --network "host" ghcr.io/ng-cdi/onos-docker:intents-cli
+docker run --rm -it --network "host" ghcr.io/ng-cdi/onos-cli:latest
 ```
 
 ## Contributors

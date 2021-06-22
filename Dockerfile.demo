@@ -1,6 +1,8 @@
-FROM ghcr.io/ng-cdi/onos-docker:intents-app as app
+ARG IFWD_VERSION=1.9.0
+FROM ghcr.io/ng-cdi/onos-ifwd:${IFWD_VERSION} as app
 
-FROM ghcr.io/ng-cdi/onos-docker:intents-onos as onos
+ARG ONOS_VERSION=latest
+FROM ghcr.io/ng-cdi/onos:${ONOS_VERSION} as onos
 
 FROM alpine:latest
 
@@ -24,8 +26,8 @@ ENV SCRIPTS_DIR /root
 WORKDIR ${SCRIPTS_DIR}
 COPY ./scripts/ .
 RUN chmod +x demo-entrypoint.sh \
- && chmod +x wait-for-onos.sh \
- && chmod +x activate-onos-apps.sh
+      && chmod +x wait-for-onos.sh \
+      && chmod +x activate-onos-apps.sh
 
 ENV KARAF_VERSION 3.0.8
 
