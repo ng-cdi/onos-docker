@@ -1,17 +1,12 @@
 ARG IFWD_VERSION=1.9.0
 FROM ghcr.io/ng-cdi/onos-ifwd:${IFWD_VERSION} as app
 
-ARG ONOS_VERSION=latest
-FROM ghcr.io/ng-cdi/onos:${ONOS_VERSION} as onos
-
-FROM alpine:latest
+FROM onosproject/onos:2.6-latest as onos
 
 LABEL maintainer="Will Fantom <w.fantom@lancs.ac.uk>"
 
-RUN apk add --no-cache \
-      curl \
-      jq \
-      openjdk8-jre
+RUN apt-get update && apt-get install -y --no-install-recommends jq curl
+
 
 ENV APP_HOME /root/app
 WORKDIR ${APP_HOME}
@@ -19,7 +14,6 @@ COPY --from=app /app/ .
 
 ENV ONOS_HOME /root/onos
 WORKDIR ${ONOS_HOME}
-COPY --from=onos /src/output/ .
 RUN sed -ibak '/log4j.rootLogger=/s/$/, stdout/' $(ls -d apache-karaf-*)/etc/org.ops4j.pax.logging.cfg
 
 ENV SCRIPTS_DIR /root
@@ -28,8 +22,6 @@ COPY ./scripts/ .
 RUN chmod +x demo-entrypoint.sh \
       && chmod +x wait-for-onos.sh \
       && chmod +x activate-onos-apps.sh
-
-ENV KARAF_VERSION 3.0.8
 
 EXPOSE 6653 6640 8181 8101 9876
 

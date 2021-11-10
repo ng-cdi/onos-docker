@@ -2,8 +2,8 @@ ARG ENV_VERSION=latest
 FROM ghcr.io/ng-cdi/onos:env-${ENV_VERSION} as builder
 
 ENV ONOS_APP_DIR=/root/onos-apps
-RUN git clone -b ifwd-p2p-intents https://github.com/ANTLab-polimi/onos-app-samples ${ONOS_APP_DIR}
 WORKDIR ${ONOS_APP_DIR}/ifwd
+COPY ./ifwd/ .
 RUN mvn clean install
 WORKDIR /output
 RUN cp ${ONOS_APP_DIR}/ifwd/target/onos-app-ifwd-1.9.0-SNAPSHOT.oar .
